@@ -42,7 +42,23 @@ export class AppComponent {
       hfInstance.addSheet(name);
       hfInstance.setSheetContent(name, cells);
     }
+    hfInstance.rebuildAndRecalculate();
+    hfInstance.addNamedExpression('TRUE', '=TRUE()')
+    hfInstance.addNamedExpression('FALSE', '=FALSE()')
 
+    var positionen = hfInstance.getSheetId("Positionen");
+    var idxDT = hfInstance.getSheetId("DeltaTetra");
+    var ST = hfInstance.getSheetId("Statik Tetra");
+    var SD = hfInstance.getSheetId("Statik Delta");
+    var auswahl = hfInstance.getSheetId("Auswahl");
+    var materialmapping = hfInstance.getSheetId("MaterialMapping");
+
+
+    // Rebuild
+    hfInstance.rebuildAndRecalculate();
+    // has to be recalled for now!
+    hfInstance.addNamedExpression('TRUE', '=TRUE()')
+    hfInstance.addNamedExpression('FALSE', '=FALSE()')
 
 
     // new develop test
@@ -57,9 +73,24 @@ export class AppComponent {
     this.printCellData("F5", 0);
     this.printCellData("F6", 0);
 
+    this.printCellData("A2", 0);
+
+    hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("A1", auswahl), "=1+2")
+    hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("A2", auswahl), "=A1&RahmeneckeNord!A1");
+    this.printCellData("A2", 0);
+
+    hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("A2", idxDT), undefined)
+    hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("B1", idxDT), undefined)
 
 
 
+
+    var idxRahmeneckeNord = hfInstance.getSheetId("RahmeneckeNord");
+    hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("A1", idxRahmeneckeNord), "=Auswahl!A1*2")
+
+    //    console.log('cell', hfInstance.getCellValue({ sheet: idxRahmeneckeNord, col: 0, row: 0 })); // =IF($B$361,0,C526)
+
+    this.printCellData("A2", 0);
 
 
     // for (var i = 0; i < sheetnames.length; i++) {
@@ -69,242 +100,33 @@ export class AppComponent {
     //   const cells = array[0].map((_, colIndex) => array.map(row => row[colIndex]));
     // }
 
-    var idxRahmeneckeNord = hfInstance.getSheetId("RahmeneckeNord");
-    console.log('cell', hfInstance.getCellValue({ sheet: idxRahmeneckeNord, col: 0, row: 0 })); // =IF($B$361,0,C526)
 
 
-    console.log('cell', hfInstance.getCellValue({ sheet: idxRahmeneckeNord, col: 1, row: 310 })); // =RahmeneckeNord!C530
-    console.log('cell', hfInstance.getCellValue({ sheet: idxRahmeneckeNord, col: 3, row: 313 })); // =IF(AND(B314=1,C318="Passbolzen"),1,0
-    var positionen = hfInstance.getSheetId("Positionen");
-    var idxDT = hfInstance.getSheetId("DeltaTetra");
-    var ST = hfInstance.getSheetId("Statik Tetra");
-    var SD = hfInstance.getSheetId("Statik Delta");
-    var auswahl = hfInstance.getSheetId("Auswahl");
-    var materialmapping = hfInstance.getSheetId("MaterialMapping");
+    // console.log('cell', hfInstance.getCellValue({ sheet: idxRahmeneckeNord, col: 1, row: 310 })); // =RahmeneckeNord!C530
+    // console.log('cell', hfInstance.getCellValue({ sheet: idxRahmeneckeNord, col: 3, row: 313 })); // =IF(AND(B314=1,C318="Passbolzen"),1,0
 
 
 
-    console.log('cell b2', hfInstance.getCellValue({ sheet: SD, col: 1, row: 1 })); // =IF($B$361,0,C526)
-    console.log('cell b2', this.hfInstance.getCellValue(this.hfInstance.simpleCellAddressFromString("B2", SD)));
-    var cellcontent = this.hfInstance.getCellValue(this.hfInstance.simpleCellAddressFromString("B2", SD)); // H169 ='Statik Tetra'!C44
-    console.log("B2", cellcontent);
-    this.printCellData("Z1375", idxDT);
-    this.printCellData("B2", SD);
+    // console.log('cell b2', hfInstance.getCellValue({ sheet: SD, col: 1, row: 1 })); // =IF($B$361,0,C526)
+    // console.log('cell b2', this.hfInstance.getCellValue(this.hfInstance.simpleCellAddressFromString("B2", SD)));
+    // var cellcontent = this.hfInstance.getCellValue(this.hfInstance.simpleCellAddressFromString("B2", SD)); // H169 ='Statik Tetra'!C44
+    // console.log("B2", cellcontent);
+    // this.printCellData("Z1375", idxDT);
+    // this.printCellData("B2", SD);
 
-    var ca = undefined;
-    ca = hfInstance.simpleCellAddressFromString("K8", idxDT);
-    hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("J8", idxDT), undefined)
-    console.log('J8', hfInstance.getCellValue(hfInstance.simpleCellAddressFromString("J8", idxDT)));
+    // var ca = undefined;
+    // ca = hfInstance.simpleCellAddressFromString("K8", idxDT);
+    // hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("J8", idxDT), undefined)
+    // console.log('J8', hfInstance.getCellValue(hfInstance.simpleCellAddressFromString("J8", idxDT)));
 
-    console.log('K8', hfInstance.getCellFormula(ca));
+    // console.log('K8', hfInstance.getCellFormula(ca));
 
-    console.log('cellcaval', hfInstance.getCellValue(ca));
-    ca = hfInstance.simpleCellAddressFromString("K17", idxDT); // ist leer falscherweise
-    console.log('K17', hfInstance.getCellFormula(ca));
-    console.log(hfInstance.getCellValue(ca));
-
-    // lookup
-    // for (var i = 7; i < 160; i++) {
-    //   hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("J" + i, idxDT), null)
-    //   this.printCellData("J" + i, idxDT);
-    // }
-    // //   
-    //  hfInstance.rebuildAndRecalculate();
-    this.printCellData("K169", idxDT);
-
-    this.printCellData("K40", idxDT);
-
-    this.printCellData("F24", SD);
-    this.printCellData("A2", positionen); this.printCellData("A3", ST);
+    // console.log('cellcaval', hfInstance.getCellValue(ca));
+    // ca = hfInstance.simpleCellAddressFromString("K17", idxDT); // ist leer falscherweise
+    // console.log('K17', hfInstance.getCellFormula(ca));
+    // console.log(hfInstance.getCellValue(ca));
 
 
-    this.printCellData("I172", idxDT);
-
-    this.printCellData("I172", idxDT);
-
-    this.printCellData("C41", SD);
-
-    this.printCellData("F24", SD);
-    this.printCellData("F30", SD);
-    this.printCellData("F31", SD);
-    this.printCellData("F32", SD);
-    this.printCellData("F33", SD);
-    this.printCellData("F34", SD);
-
-    this.printCellData("F36", SD);
-    this.printCellData("F37", SD);
-    this.printCellData("F38", SD);
-
-    // hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("D34", SD), "0.72");
-    this.printCellData("D34", SD);
-    this.printCellData("U43", SD); // abweichung vom beispiel
-
-
-    this.printCellData("B45", SD);
-    this.printCellData("B46", SD);
-    this.printCellData("B47", SD);
-    this.printCellData("B55", SD);
-
-    this.printCellData("R117", SD);
-
-    this.printCellData("H168", idxDT);
-    this.printCellData("H169", idxDT);
-    this.printCellData("H170", idxDT);
-    this.printCellData("H171", idxDT);
-    this.printCellData("H172", idxDT);
-
-    this.printCellData("I168", idxDT);
-    this.printCellData("I169", idxDT);
-    this.printCellData("I170", idxDT);
-    this.printCellData("I171", idxDT);
-    this.printCellData("I172", idxDT);
-
-    this.printCellData("J168", idxDT);
-    this.printCellData("J169", idxDT);
-    this.printCellData("J170", idxDT);
-    this.printCellData("J171", idxDT);
-    this.printCellData("J172", idxDT);
-
-    this.printCellData("K168", idxDT);
-    this.printCellData("K169", idxDT);
-    this.printCellData("K170", idxDT);
-    this.printCellData("K171", idxDT);
-    this.printCellData("K172", idxDT);
-
-
-    ca = hfInstance.simpleCellAddressFromString("I172", idxDT);
-    console.log('I172', hfInstance.getCellFormula(ca));
-    console.log('cellcaval', hfInstance.getCellValue(ca));
-
-    // hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("A1", ST), "1")
-    // hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("A2", ST), "3")
-    // hfInstance.setCellContents(hfInstance.simpleCellAddressFromString("A3", ST), "=MAX(A1:A2)")
-    this.printCellData("A3", ST);
-
-    // this.printCellData("C44", ST);
-    // this.printCellData("F41", ST);
-    // this.printCellData("O48", ST);
-    this.printCellData("S1213", idxDT);
-
-    //  for (var i = 1198; i < 1415; i++) {
-
-    this.printCellData("C1198", idxDT);
-    this.printCellData("D1198", idxDT);
-    this.printCellData("E1198", idxDT);
-    this.printCellData("F1198", idxDT);
-    this.printCellData("G1198", idxDT);
-    this.printCellData("H1198", idxDT);
-    this.printCellData("I1198", idxDT);
-    this.printCellData("J1198", idxDT);
-    this.printCellData("K1198", idxDT);
-    this.printCellData("L1198", idxDT);
-    this.printCellData("M1198", idxDT);
-    this.printCellData("N1198", idxDT);
-    this.printCellData("O1198", idxDT);
-    this.printCellData("P1198", idxDT);
-    this.printCellData("Q1198", idxDT);
-    this.printCellData("R1198", idxDT);
-    this.printCellData("S1198", idxDT);
-
-
-    // muss ausgeführt wreden?!
-    this.printCellData("C3", materialmapping);
-    this.printCellData("F5", auswahl); // ='Material-Mapping'!C3
-    this.printCellData("J70", idxDT);
-    this.printCellData("K70", idxDT); // =IF(ISBLANK(J70),Auswahl!$F$5,J70)
-    this.printCellData("O1154", idxDT);
-
-
-    //          =   "##NA="&E1154&"##GR=Hilfslinien##SG=Statikachsen##"&$E$1153&"="&E1154&"##"&$M$1153&"="&M1154&"##"&$N$1153&"="&N1154&"##"&$O$1153&"="&O1154&"##"&$P$1153&"="&P1154&"##"&$Q$1153&"="&Q1154&"##"&$R$1153&"="&R1154&"##"&$S$1153&"="&S1154&"##"&$T$1153&"="&T1154&"##"&$U$1153&"="&U1154&"##"
-    // cellcontent = '="##NA="&E1154&"##GR=Hilfslinien##SG=Statikachsen##"&$E$1153&"="&E1154&"##"&$M$1153&"="&M1154&"##"&$N$1153&"="&N1154&"##"&$O$1153&"="&O1154&"##"&$P$1153&"="&P1154&"##"&$Q$1153&"="&Q1154&"##"&$R$1153&"="&R1154&"##"&$S$1153&"="&S1154&"##"&$T$1153&"="&T1154&"##"&$U$1153&"="&U1154&"##"';
-    // this.hfInstance.setCellContents(this.hfInstance.simpleCellAddressFromString("T1198", idxDT), cellcontent);
-    this.printCellData("T1198", idxDT); // läuft net
-
-    this.printCellData("U1198", idxDT);
-    this.printCellData("VL1198", idxDT);
-    this.printCellData("W1198", idxDT);
-    this.printCellData("X1198", idxDT);
-    this.printCellData("Z1198", idxDT);
-    this.printCellData("Z1198", idxDT);
-
-    this.printCellData("K1223", idxDT);
-    this.printCellData("L1223", idxDT);
-    this.printCellData("M1223", idxDT);
-    this.printCellData("N1223", idxDT);
-    this.printCellData("O1223", idxDT);
-
-
-    cellcontent = '=SUM(L168:L171)';
-
-    // this.printCellData("L168", idxDT);
-    // this.printCellData("L169", idxDT);
-    // this.printCellData("L170", idxDT);
-    // this.printCellData("L171", idxDT);
-    this.printCellData("L172", idxDT);
-
-    this.printCellData("I172", idxDT);
-
-    // this.printCellData("P1223", idxDT);
-
-    // this.printCellData("Q1223", idxDT);
-    // this.printCellData("R1223", idxDT);
-    // this.printCellData("S1223", idxDT);
-    // this.printCellData("T1223", idxDT);
-
-    // cellcontent = '=C1223&";"&D1223&";"&E1223&";"&F1223&";"&G1223&H1223&":"&I1223&":"&J1223&"/"&G1224&H1224&":"&I1224&":"&J1224&"/"&G1225&H1225&":"&I1225&":"&J1225&"/"&G1226&H1226&":"&I1226&":"&J1226&"/"&G1227&H1227&":"&I1227&":"&J1227&"/"&G1228&H1228&":"&I1228&":"&J1228&"/"&G1229&H1229&":"&I1229&":"&J1229&";"&K1223&":"&L1223&":"&M1223&";"&N1223&";"&O1223&";"&P1223&";"&Q1223&";"&R1223&";"&S1223&";"&T1223&";"&U1223&";"&V1223&";"&W1223&";"&X1223&";"&Y1223';
-    // this.hfInstance.setCellContents(this.hfInstance.simpleCellAddressFromString("Z1223", idxDT), cellcontent);
-    // this.printCellData("Z1223", idxDT);
-
-    // this.printCellData("Z1199", idxDT);
-    // this.printCellData("Z1200", idxDT);
-    // this.printCellData("Z1201", idxDT);
-    // this.printCellData("Z1202", idxDT);
-    // this.printCellData("Z1203", idxDT);
-    // this.printCellData("Z1204", idxDT);
-    // this.printCellData("Z1205", idxDT);
-    // this.printCellData("Z1206", idxDT);
-    // this.printCellData("Z1207", idxDT);
-    // this.printCellData("Z1208", idxDT);
-    // this.printCellData("Z1209", idxDT);
-
-    var json = {
-      parameters: {
-        Template: "WEB-VORLAGE-02",
-        HalleBreiteH1: "2000",
-        HalleLängeH1: "5000",
-        HallleTraufhoheH1: "7"
-      },
-      objects: [
-        {
-          id: "2825c09b-5aa8-425c-965b-5b61c37099da-Achsen-232-25",
-          typ: "TEXTBLOCK",
-          konfigurationId: "2825c09b-5aa8-425c-965b-5b61c37099da",
-          name: "ACHSENBESCHRIFTUNG",
-          baugruppe: "Text",
-          bauuntergruppe: "",
-          text: "Nord",
-          textHeight: 150.0,
-          info: "",
-          material: "",
-          points: [
-            {
-              x: 2500.0,
-              y: 2650.0,
-              z: 0.0
-            }
-          ],
-          extrusionsvektor: {
-            x: 0.0,
-            y: 0.0,
-            z: 0.0
-          },
-          booleanOperation: "",
-          visible: true,
-          verknuepfteElemente: [],
-          verknuepfteKonfigurationen: "2825c09b-5aa8-425c-965b-5b61c37099da"
-        }
-      ]
-    };
     // for (var i = 1198; i < 1412; i++) {
     //   this.printCellData("Z" + i, idxDT);
     // }
@@ -351,7 +173,7 @@ export class AppComponent {
     // this.printCellData("Z1286", idxDT);
     // this.printCellData("Z1412", idxDT);
     // this.printCellData("Z1413", idxDT);
-    this.createJsonMenu();
+    //  this.createJsonMenu();
   }
 
   getStartCell3D() {
